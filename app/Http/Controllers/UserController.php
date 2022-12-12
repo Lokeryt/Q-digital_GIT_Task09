@@ -19,8 +19,7 @@ class UserController extends Controller
     {
         if (Auth::check() && (!$id || $id == Auth::id())) {
             $userId = Auth::id();
-        }
-        else {
+        } else {
             $userId = $id;
         }
 

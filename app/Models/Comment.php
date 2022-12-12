@@ -23,11 +23,6 @@ class Comment extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function createComment($data)
-    {
-        $this->create($data);
-    }
-
     public function receiver()
     {
         return $this->belongsTo(User::class, 'receiver_id', 'id');
