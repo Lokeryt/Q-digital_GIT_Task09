@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Book;
 use App\Models\Comment;
 use App\Models\User;
 
@@ -34,21 +35,42 @@ class AuthServiceProvider extends ServiceProvider
             if ($userId != $currentUser->id) {
                 return Response::allow();
             }
-            Response::deny();
+            return Response::deny();
         });
 
         Gate::define('reply-comment', function (User $currentUser, Comment $comment) {
             if ($comment->sender_id != $currentUser->id) {
                 return Response::allow();
             }
-            Response::deny();
+            return Response::deny();
         });
 
         Gate::define('delete-comment', function (User $user, Comment $comment) {
             if (($comment->receiver_id == $user->id && $comment->parent_id == null) || $comment->sender_id == $user->id) {
                 return Response::allow();
             }
-            Response::deny();
+            return Response::deny();
+        });
+
+        Gate::define('create-book', function (User $currentUser, User $owner) {
+            if ($currentUser->id == $owner->id) {
+                return Response::allow();
+            }
+            return Response::deny();
+        });
+
+        Gate::define('delete-edit-book', function (User $currentUser, Book $book) {
+            if ($currentUser->id == $book->user_id) {
+                return Response::allow();
+            }
+            return Response::deny();
+        });
+
+        Gate::define('open-library', function (User $currentUser, User $user) {
+            if ($currentUser->id == $user->id || $currentUser->hasLibraryAccess($user)) {
+                return Response::allow();
+            }
+            return Response::deny();
         });
     }
 }

@@ -40,4 +40,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class, 'sender_id', 'id');
     }
+
+    public function ownedBooks()
+    {
+        return $this->hasMany(Book::class, 'user_id', 'id');
+    }
+
+    public function hasLibraryAccess($owner)
+    {
+        $access = new UserLibraryAccess();
+
+        return $access->checkAccess($owner, $this);
+    }
 }

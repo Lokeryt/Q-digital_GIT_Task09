@@ -11,6 +11,16 @@
                 </ul>
             </div>
         @endif
+        @can('open-library', $user)
+            <a class="comment-button" href="{{ route('UserBooks', $user->id) }}">Библиотека книг</a>
+        @endcan
+        @auth
+            @if($user->hasLibraryAccess(Auth::user()))
+                <a class="comment-button" href="{{ route('ChangeLibraryAccess', $user->id) }}">Отключить доступ к библиотеке</a>
+            @elseif(Auth::id() != $user->id && !$user->hasLibraryAccess(Auth::user()))
+                <a class="comment-button" href="{{ route('ChangeLibraryAccess', $user->id) }}">Дать доступ к библиотеке</a>
+            @endif
+        @endauth
         <h1 class="profile-owner">{{ $user->email }}</h1>
         <hr>
         <div class="comments">

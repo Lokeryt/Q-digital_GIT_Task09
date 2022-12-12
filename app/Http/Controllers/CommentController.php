@@ -36,8 +36,7 @@ class CommentController extends Controller
             Gate::authorize('write-comment', $receiver->id);
         }
 
-        $comment = new Comment();
-        $comment->createComment($request->all() + ['receiver_id' => $receiver->id, 'sender_id' => Auth::id()]);
+        Comment::create($request->all() + ['receiver_id' => $receiver->id, 'sender_id' => Auth::id()]);
 
         return Redirect::back();
     }
