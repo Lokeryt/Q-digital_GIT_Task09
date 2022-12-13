@@ -45,7 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('delete-comment', function (User $user, Comment $comment) {
-            if (($comment->receiver_id == $user->id && $comment->parent_id == null) || $comment->sender_id == $user->id) {
+            if ($comment->findFirstParent()->receiver_id == $user->id || $comment->sender_id == $user->id) {
                 return Response::allow();
             }
             Response::deny();

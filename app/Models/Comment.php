@@ -37,4 +37,22 @@ class Comment extends Model
     {
         return $this->hasMany(self::class, 'parent_id', 'id')->withTrashed()->get();
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id', 'id')->withTrashed()->first();
+    }
+
+    public function findFirstParent()
+    {
+        $parent = $this->parent();
+
+        if ($parent) {
+            $comment = $parent->findFirstParent();
+        } else {
+            $comment = $this;
+        }
+
+        return $comment;
+    }
 }
