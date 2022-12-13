@@ -17,10 +17,10 @@ class UserController extends Controller
 
     public function profile(Request $request, $id = null)
     {
-        if (Auth::check() && (!$id || $id == Auth::id())) {
+        $userId = $id;
+
+        if (Auth::check() && !$userId) {
             $userId = Auth::id();
-        } else {
-            $userId = $id;
         }
 
         $user = User::findOrFail($userId);

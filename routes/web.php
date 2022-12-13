@@ -30,4 +30,4 @@ Route::prefix('comment')->group(function () {
     Route::post('/write/{userId}', [CommentController::class, 'store'])->name('WriteComment')->middleware('auth');
 });
 
-Route::get('user/comments', [CommentController::class, 'userSentComments'])->name('UserComments')->middleware('auth');
+Route::get('user/comments', [CommentController::class, 'index'])->name('UserComments')->middleware('auth');

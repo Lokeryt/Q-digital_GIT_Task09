@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class CommentController extends Controller
 {
-    public function userSentComments()
+    public function index()
     {
         $user = Auth::user();
 
