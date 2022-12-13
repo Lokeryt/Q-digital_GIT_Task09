@@ -32,7 +32,7 @@ Route::prefix('comment')->group(function () {
 });
 
 Route::prefix('user')->group(function () {
-    Route::get('/comments', [CommentController::class, 'userSentComments'])->name('UserComments')->middleware('auth');
+    Route::get('/comments', [CommentController::class, 'index'])->name('UserComments')->middleware('auth');
     Route::get('/{id}/books', [BookController::class, 'getUserBooks'])->name('UserBooks')->middleware('auth');
     Route::get('/{id}/access', [BookController::class, 'changeLibraryAccess'])->name('ChangeLibraryAccess')->middleware('auth');
 });
