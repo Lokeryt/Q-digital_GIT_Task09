@@ -25,7 +25,9 @@ Route::get('users', [UserController::class, 'index'])->name('Users');
 
 Route::get('profile/{id?}', [UserController::class, 'profile'])->name('Profile');
 
-Route::get('comment/delete/{id}', [CommentController::class, 'delete'])->name('DeleteComment')->middleware('auth');
-Route::post('comment/write/{userId}', [CommentController::class, 'store'])->name('WriteComment')->middleware('auth');
+Route::prefix('comment')->group(function () {
+    Route::get('/delete/{id}', [CommentController::class, 'delete'])->name('DeleteComment')->middleware('auth');
+    Route::post('/write/{userId}', [CommentController::class, 'store'])->name('WriteComment')->middleware('auth');
+});
 
 Route::get('user/comments', [CommentController::class, 'userSentComments'])->name('UserComments')->middleware('auth');
