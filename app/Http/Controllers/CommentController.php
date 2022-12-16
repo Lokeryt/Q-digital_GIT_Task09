@@ -23,8 +23,6 @@ class CommentController extends Controller
 
     public function store($userId, CommentStoreRequest $request)
     {
-        $request->validated();
-
         if ($request->parent_id) {
             $parentComment = Comment::findOrFail($request->parent_id);
 
@@ -36,7 +34,7 @@ class CommentController extends Controller
             Gate::authorize('write-comment', $receiver->id);
         }
 
-        Comment::create($request->all() + ['receiver_id' => $receiver->id, 'sender_id' => Auth::id()]);
+        Comment::create($request->validated() + ['receiver_id' => $receiver->id, 'sender_id' => Auth::id()]);
 
         return Redirect::back();
     }

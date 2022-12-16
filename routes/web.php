@@ -26,21 +26,24 @@ Route::get('users', [UserController::class, 'index'])->name('Users');
 
 Route::get('profile/{id?}', [UserController::class, 'profile'])->name('Profile');
 
-Route::prefix('comment')->group(function () {
-    Route::get('/delete/{id}', [CommentController::class, 'delete'])->name('DeleteComment')->middleware('auth');
-    Route::post('/write/{userId}', [CommentController::class, 'store'])->name('WriteComment')->middleware('auth');
+Route::group(['prefix' => 'comment', 'middleware' => 'auth'], function () {
+    Route::get('/delete/{id}', [CommentController::class, 'delete'])->name('DeleteComment');
+    Route::post('/write/{userId}', [CommentController::class, 'store'])->name('WriteComment');
 });
 
-Route::prefix('user')->group(function () {
-    Route::get('/comments', [CommentController::class, 'index'])->name('UserComments')->middleware('auth');
-    Route::get('/{id}/books', [BookController::class, 'getUserBooks'])->name('UserBooks')->middleware('auth');
-    Route::get('/{id}/access', [BookController::class, 'changeLibraryAccess'])->name('ChangeLibraryAccess')->middleware('auth');
+Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
+    Route::get('/comments', [CommentController::class, 'index'])->name('UserComments');
+    Route::get('/{id}/books', [BookController::class, 'getUserBooks'])->name('UserBooks');
+    Route::get('/{id}/access', [BookController::class, 'changeLibraryAccess'])->name('ChangeLibraryAccess');
 });
 
-Route::prefix('book')->group(function () {
-    Route::post('/create/{userId}', [BookController::class, 'store'])->name('CreateBook')->middleware('auth');
-    Route::post('/edit/{id}', [BookController::class, 'edit'])->name('EditBook')->middleware('auth');
-    Route::get('/delete/{id}', [BookController::class, 'delete'])->name('DeleteBook')->middleware('auth');
-    Route::get('/share/{id}', [BookController::class, 'shareBook'])->name('ShareBook')->middleware('auth');
+Route::group(['prefix' => 'book'], function () {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::post('/create/{userId}', [BookController::class, 'store'])->name('CreateBook');
+        Route::post('/edit/{id}', [BookController::class, 'edit'])->name('EditBook');
+        Route::get('/delete/{id}', [BookController::class, 'delete'])->name('DeleteBook');
+        Route::get('/share/{id}', [BookController::class, 'shareBook'])->name('ShareBook');
+    });
+
     Route::get('/{id}', [BookController::class, 'getBook'])->name('Book')->middleware('books.access');
 });
