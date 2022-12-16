@@ -2,13 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Book;
-use App\Models\Comment;
-use App\Models\User;
-
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use \Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -37,25 +31,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('delete-comment', 'App\Policies\CommentPolicy@deleteComment');
 
-        Gate::define('create-book', function (User $currentUser, User $owner) {
-            if ($currentUser->id == $owner->id) {
-                return Response::allow();
-            }
-            return Response::deny();
-        });
+        Gate::define('create-book', 'App\Policies\BookPolicy@createBook');
 
-        Gate::define('delete-edit-book', function (User $currentUser, Book $book) {
-            if ($currentUser->id == $book->user_id) {
-                return Response::allow();
-            }
-            return Response::deny();
-        });
+        Gate::define('delete-edit-book', 'App\Policies\BookPolicy@deleteEditBook');
 
-        Gate::define('open-library', function (User $currentUser, User $user) {
-            if ($currentUser->id == $user->id || $currentUser->hasLibraryAccess($user)) {
-                return Response::allow();
-            }
-            return Response::deny();
-        });
+        Gate::define('open-library', 'App\Policies\BookPolicy@openLibrary');
     }
 }
