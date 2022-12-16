@@ -26,7 +26,9 @@
                     <form class="reply-comment-form" action="{{ route('EditBook', $book->id) }}" method="POST">
                         @csrf
                         <input class="input-title" type="text" name="title" placeholder="Заголовок" value="{{ $book->title }}" required>
-                        <textarea class="input-text" type="text" name="text" placeholder="Текст" required>{{ $book->text }}</textarea>
+                        <textarea class="input-text" type="text" name="text" placeholder="Текст" required>
+                            {{ $book->text }}
+                        </textarea>
                         <button class="create-button" type="submit">Изменить</button>
                     </form>
                 </div>

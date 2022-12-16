@@ -27,7 +27,9 @@ class CheckBooksAccess
 
         if ($request->code) {
             return $request->code == $book->code ? $next($request) : abort(403);
-        } elseif (!Auth::check()) {
+        }
+
+        if (!Auth::check()) {
             abort(403);
         }
 
