@@ -7,7 +7,6 @@ use App\Models\User;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use \Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -30,25 +29,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('write-comment', function (User $currentUser, $userId) {
-            if ($userId != $currentUser->id) {
-                return Response::allow();
-            }
-            Response::deny();
-        });
+        Gate::define('write-comment', 'App\Policies\CommentPolicy@writeComment');
 
-        Gate::define('reply-comment', function (User $currentUser, Comment $comment) {
-            if ($comment->sender_id != $currentUser->id) {
-                return Response::allow();
-            }
-            Response::deny();
-        });
+        Gate::define('reply-comment', 'App\Policies\CommentPolicy@replyComment');
 
-        Gate::define('delete-comment', function (User $user, Comment $comment) {
-            if ($comment->findFirstParent()->receiver_id == $user->id || $comment->sender_id == $user->id) {
-                return Response::allow();
-            }
-            Response::deny();
-        });
+        Gate::define('delete-comment', 'App\Policies\CommentPolicy@deleteComment');
     }
 }
